@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -13,6 +14,9 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptor;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DriveRouteResult;
@@ -48,13 +52,76 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         searchRouteResult(ROUTE_TYPE_RIDE, RouteSearch.RidingDefault);
     }
 
-    private void searchRouteResult(int route_type_ride, int ridingDefault) {
+    private void searchRouteResult(int routeType, int mode) {
+        if (mStartPoint == null) {
+            ToastUtil.show(mContext, "Locating... please wait");
+            return;
+        }
+        if (mEndPoint == null) {
+            ToastUtil.show(mContext, "Did not choose a Ending yet");
+            return;
+        }
+        showProgressDialog();
+        final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(mStartPoint, mEndPoint);
+        if (routeType == ROUTE_TYPE_RIDE) {
+            RouteSearch.RideRouteQuery query = new RouteSearch.RideRouteQuery(fromAndTo, mode);
+            mRouteSearch.calculateRideRouteAsyn(query);
+        }
+    }
+
+    private void showProgressDialog() {
     }
 
     private void setFormantoMaker() {
+        mAMap.addMarker(new MarkerOptions().position(LocationUtil.convertToLatLng(mStartPoint))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+        mAMap.addMarker(new MarkerOptions().position(LocationUtil.convertToLatLng(mEndPoint))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
+
     }
 
     private void init() {
+        if (mAMap == null) {
+            mAMap = mMapView.getMap();
+            setUpMap();
+        }
+        registerListener();
+        mRouteSearch = new RouteSearch(this);
+        mRouteSearch.setRouteSearchListener(this);
+        mBottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
+    }
+
+    private void registerListener() {
+        mAMap.setOnMapClickListener((AMap.OnMapClickListener) WorkdayActivity.this);
+    }
+
+    private void setUpMap() {
+        mAMap.setLocationSource(this);
+        mAMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mAMap.setMyLocationEnabled(true);
+        mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.onPause();
+        deactivate();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+        if (null != mLocationClient) {
+            mLocationClient.onDestroy();
+        }
     }
 
     @Override
