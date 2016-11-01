@@ -1,8 +1,10 @@
 package com.example.user.kgend;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.RidePath;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
@@ -40,6 +43,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
     private final int ROUTE_TYPE_RIDE = 4;
+    private ProgressDialog progDialog = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +74,20 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     }
 
     private void showProgressDialog() {
+        if (progDialog == null) {
+            progDialog = new ProgressDialog(this);
+            progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progDialog.setIndeterminate(false);
+            progDialog.setMessage("searching...");
+            progDialog.setCancelable(true);
+            progDialog.show();
+        }
+    }
+
+    private void dismissProgressDialog() {
+        if (progDialog != null) {
+            progDialog.dismiss();
+        }
     }
 
     private void setFormantoMaker() {
@@ -126,16 +144,35 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
+        if (mListener != null && aMapLocation.getErrorCode() == 0) {
+            mListener.onLocationChanged(aMapLocation);
+        } else {
+            Log.e("ErrorCode", aMapLocation.getErrorCode() + aMapLocation.getErrorInfo());
+            String Cityname = aMapLocation.getCity();
+        }
     }
 
     @Override
-    public void activate(OnLocationChangedListener onLocationChangedListener) {
-
+    public void activate(OnLocationChangedListener listener) {
+        mListener = listener;
+        if (mLocationClient == null) {
+            mLocationClient = new AMapLocationClient(this);
+            mClientOption = new AMapLocationClientOption();
+            mLocationClient.setLocationListener(this);
+            mClientOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            mLocationClient.setLocationOption(mClientOption);
+            mLocationClient.startLocation();
+        }
     }
 
     @Override
     public void deactivate() {
-
+        mListener = null;
+        if (mLocationClient != null) {
+            mLocationClient.stopLocation();
+            mLocationClient.onDestroy();
+        }
+        mLocationClient = null;
     }
 
     @Override
@@ -154,7 +191,17 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     }
 
     @Override
-    public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
-
+    public void onRideRouteSearched(RideRouteResult result, int errorCode) {
+        dismissProgressDialog();
+        mAMap.clear();
+        if (errorCode == 1000) {
+            if (result != null && result.getPaths() != null) {
+                if (result.getPaths().size() > 0) {
+                    mRideResult = result;
+                    final RidePath ridePath = mRideResult.getPaths().get(0);
+                    RideRouteOverlay rideRouteOverlay = new RideRouteOverlay();
+                }
+            }
+        }
     }
 }
