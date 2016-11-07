@@ -207,7 +207,10 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
                 if (result.getPaths().size() > 0) {
                     mRideResult = result;
                     final RidePath ridePath = mRideResult.getPaths().get(0);
-                    RideRouteOverlay rideRouteOverlay = new RideRouteOverlay();
+                    RideRouteOverlay rideRouteOverlay = new RideRouteOverlay(this, mAMap, ridePath, mRideResult.getStartPos(), mRideResult.getTargetPos());
+                    rideRouteOverlay.removeFromMap();
+                    rideRouteOverlay.addToMap();
+                    rideRouteOverlay.zoomToSpan();
                 }
             }
         }
