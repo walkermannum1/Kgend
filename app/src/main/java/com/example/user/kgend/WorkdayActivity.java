@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -211,6 +212,10 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
                     rideRouteOverlay.removeFromMap();
                     rideRouteOverlay.addToMap();
                     rideRouteOverlay.zoomToSpan();
+                    mBottomLayout.setVisibility(View.VISIBLE);
+                    int dis = (int) ridePath.getDistance();
+                    int dur = (int) ridePath.getDuration();
+                    String des = AMapUtil.getFriendlyTime(dur);
                 }
             }
         }

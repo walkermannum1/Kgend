@@ -59,9 +59,6 @@ public class RideRouteOverlay extends RouteOverlay {
         addPolyLine(mPolylineOption);
     }
 
-    private void addStartAndEndMaker() {
-    }
-
     private void addRideStationMakers(RideStep rideStep, LatLng lanlng) {
     }
 

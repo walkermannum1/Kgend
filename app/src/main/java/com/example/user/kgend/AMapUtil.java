@@ -22,4 +22,8 @@ public class AMapUtil {
         }
         return lineShapes;
     }
+
+    public static String getFriendlyTime(int second) {
+        return second + "s";
+    }
 }

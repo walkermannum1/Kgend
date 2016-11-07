@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.BitmapDescriptor;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 
@@ -23,8 +26,8 @@ import static com.amap.api.services.nearby.NearbySearch.destroy;
 public class RouteOverlay {
     protected List<Marker> stationMakers = new ArrayList<Marker>();
     protected List<Polyline> allPolylines = new ArrayList<Polyline>();
-    protected Marker startMaker;
-    protected Marker endMaker;
+    protected Marker startMarker;
+    protected Marker endMarker;
     protected AMap mAMap;
     protected LatLng startPoint;
     protected LatLng endPoint;
@@ -36,11 +39,11 @@ public class RouteOverlay {
     }
 
     public void removeFromMap() {
-        if (startMaker != null) {
-            startMaker.remove();
+        if (startMarker != null) {
+            startMarker.remove();
         }
-        if (endMaker != null) {
-            endMaker.remove();
+        if (endMarker != null) {
+            endMarker.remove();
         }
         for (Marker maker : stationMakers) {
             maker.remove();
@@ -92,5 +95,25 @@ public class RouteOverlay {
         if (polyline != null) {
             allPolylines.add(polyline);
         }
+    }
+
+    protected void addStartAndEndMaker() {
+        startMarker = mAMap.addMarker((new MarkerOptions())
+                .position(startPoint).icon(getStartBitmapDescriptor())
+                .title("\u8D77\u70B9"));
+        // startMarker.showInfoWindow();
+
+        endMarker = mAMap.addMarker((new MarkerOptions()).position(endPoint)
+                .icon(getEndBitmapDescriptor()).title("\u7EC8\u70B9"));
+        // mAMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,
+        // getShowRouteZoom()));
+    }
+
+    protected BitmapDescriptor getStartBitmapDescriptor() {
+        return BitmapDescriptorFactory.fromResource(R.drawable.start);
+    }
+
+    protected BitmapDescriptor getEndBitmapDescriptor() {
+        return BitmapDescriptorFactory.fromResource(R.drawable.end);
     }
 }
