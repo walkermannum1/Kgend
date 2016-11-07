@@ -14,10 +14,13 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapOptions;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -116,8 +119,13 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private void setUpMap() {
         mAMap.setLocationSource(this);
         mAMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mAMap.getUiSettings().setCompassEnabled(true);
+        mAMap.getUiSettings().setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
+        mAMap.moveCamera(CameraUpdateFactory.zoomTo(17));
         mAMap.setMyLocationEnabled(true);
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+        //LatLngBounds latLngBounds = new LatLngBounds();
+        //mAMap.setMapStatusLimits();
     }
 
     @Override
