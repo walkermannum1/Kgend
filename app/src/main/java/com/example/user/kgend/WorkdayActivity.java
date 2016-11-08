@@ -3,8 +3,10 @@ package com.example.user.kgend;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -14,10 +16,14 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapOptions;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -30,15 +36,15 @@ import com.amap.api.services.route.WalkRouteResult;
 /**
  * Created by user on 2016/10/31.
  */
-public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener, RouteSearch.OnRouteSearchListener {
+public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener, RouteSearch.OnRouteSearchListener, AMap.OnMapClickListener {
     private AMap mAMap;
     private MapView mMapView;
     private Context mContext;
     private RouteSearch mRouteSearch;
     private RideRouteResult mRideResult;
     private RelativeLayout mBottomLayout;
-    private LatLonPoint mStartPoint = new LatLonPoint(118, 34);
-    private LatLonPoint mEndPoint = new LatLonPoint(118, 33);
+    private LatLonPoint mStartPoint = new LatLonPoint(31.131233,121.461006);
+    private LatLonPoint mEndPoint = new LatLonPoint(31.170121,121.401232);
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
@@ -52,7 +58,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         init();
-        setFormantoMaker();
+        setFromtoMaker();
         searchRouteResult(ROUTE_TYPE_RIDE, RouteSearch.RidingDefault);
     }
 
@@ -90,10 +96,10 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         }
     }
 
-    private void setFormantoMaker() {
-        mAMap.addMarker(new MarkerOptions().position(LocationUtil.convertToLatLng(mStartPoint))
+    private void setFromtoMaker() {
+        mAMap.addMarker(new MarkerOptions().position(AMapUtil.convertToLatLng(mStartPoint))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-        mAMap.addMarker(new MarkerOptions().position(LocationUtil.convertToLatLng(mEndPoint))
+        mAMap.addMarker(new MarkerOptions().position(AMapUtil.convertToLatLng(mEndPoint))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
 
     }
@@ -110,14 +116,19 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     }
 
     private void registerListener() {
-        mAMap.setOnMapClickListener((AMap.OnMapClickListener) WorkdayActivity.this);
+        mAMap.setOnMapClickListener(WorkdayActivity.this);
     }
 
     private void setUpMap() {
         mAMap.setLocationSource(this);
         mAMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mAMap.getUiSettings().setCompassEnabled(true);
+        mAMap.getUiSettings().setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
+        mAMap.moveCamera(CameraUpdateFactory.zoomTo(17));
         mAMap.setMyLocationEnabled(true);
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+        //LatLngBounds latLngBounds = new LatLngBounds();
+        //mAMap.setMapStatusLimits();
     }
 
     @Override
@@ -199,9 +210,36 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
                 if (result.getPaths().size() > 0) {
                     mRideResult = result;
                     final RidePath ridePath = mRideResult.getPaths().get(0);
-                    RideRouteOverlay rideRouteOverlay = new RideRouteOverlay();
+                    RideRouteOverlay rideRouteOverlay = new RideRouteOverlay(this, mAMap, ridePath, mRideResult.getStartPos(), mRideResult.getTargetPos());
+                    rideRouteOverlay.removeFromMap();
+                    rideRouteOverlay.addToMap();
+                    rideRouteOverlay.zoomToSpan();
+                    mBottomLayout.setVisibility(View.VISIBLE);
+                    int dis = (int) ridePath.getDistance();
+                    int dur = (int) ridePath.getDuration();
+                    String des = AMapUtil.getFriendlyTime(dur) + "(" +AMapUtil.getFriendlyLength(dis) + ")";
+                    mBottomLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext, RideDetailActivity.class);
+                            intent.putExtra("ride_path", ridePath);
+                            intent.putExtra("ride_result", mRideResult);
+                            startActivity(intent);
+                        }
+                    });
+                } else if (result == null && result.getPaths() == null) {
+                    ToastUtil.show(mContext, "Sorry, did not get any data!");
                 }
+            } else {
+                ToastUtil.show(mContext, "Sorry, cannot get any data!");
             }
+        } else {
+            ToastUtil.showerror(this.getApplicationContext(), errorCode);
         }
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
     }
 }
