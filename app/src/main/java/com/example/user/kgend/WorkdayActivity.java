@@ -43,8 +43,8 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private RouteSearch mRouteSearch;
     private RideRouteResult mRideResult;
     private RelativeLayout mBottomLayout;
-    private LatLonPoint mStartPoint = new LatLonPoint(121.461006,31.131233);
-    private LatLonPoint mEndPoint = new LatLonPoint(121.401232,31.170121);
+    private LatLonPoint mStartPoint = new LatLonPoint(31.131233,121.461006);
+    private LatLonPoint mEndPoint = new LatLonPoint(31.170121,121.401232);
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
@@ -58,7 +58,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         init();
-        setFormantoMaker();
+        setFromtoMaker();
         searchRouteResult(ROUTE_TYPE_RIDE, RouteSearch.RidingDefault);
     }
 
@@ -96,10 +96,10 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         }
     }
 
-    private void setFormantoMaker() {
-        mAMap.addMarker(new MarkerOptions().position(LocationUtil.convertToLatLng(mStartPoint))
+    private void setFromtoMaker() {
+        mAMap.addMarker(new MarkerOptions().position(AMapUtil.convertToLatLng(mStartPoint))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-        mAMap.addMarker(new MarkerOptions().position(LocationUtil.convertToLatLng(mEndPoint))
+        mAMap.addMarker(new MarkerOptions().position(AMapUtil.convertToLatLng(mEndPoint))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
 
     }
