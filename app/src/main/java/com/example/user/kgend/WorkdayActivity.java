@@ -3,6 +3,7 @@ package com.example.user.kgend;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
@@ -34,15 +36,15 @@ import com.amap.api.services.route.WalkRouteResult;
 /**
  * Created by user on 2016/10/31.
  */
-public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener, RouteSearch.OnRouteSearchListener {
+public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener, RouteSearch.OnRouteSearchListener, AMap.OnMapClickListener {
     private AMap mAMap;
     private MapView mMapView;
     private Context mContext;
     private RouteSearch mRouteSearch;
     private RideRouteResult mRideResult;
     private RelativeLayout mBottomLayout;
-    private LatLonPoint mStartPoint = new LatLonPoint(118, 34);
-    private LatLonPoint mEndPoint = new LatLonPoint(118, 33);
+    private LatLonPoint mStartPoint = new LatLonPoint(121.461006,31.131233);
+    private LatLonPoint mEndPoint = new LatLonPoint(121.401232,31.170121);
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
@@ -114,7 +116,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     }
 
     private void registerListener() {
-        mAMap.setOnMapClickListener((AMap.OnMapClickListener) WorkdayActivity.this);
+        mAMap.setOnMapClickListener(WorkdayActivity.this);
     }
 
     private void setUpMap() {
@@ -215,9 +217,29 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
                     mBottomLayout.setVisibility(View.VISIBLE);
                     int dis = (int) ridePath.getDistance();
                     int dur = (int) ridePath.getDuration();
-                    String des = AMapUtil.getFriendlyTime(dur);
+                    String des = AMapUtil.getFriendlyTime(dur) + "(" +AMapUtil.getFriendlyLength(dis) + ")";
+                    mBottomLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext, RideDetailActivity.class);
+                            intent.putExtra("ride_path", ridePath);
+                            intent.putExtra("ride_result", mRideResult);
+                            startActivity(intent);
+                        }
+                    });
+                } else if (result == null && result.getPaths() == null) {
+                    ToastUtil.show(mContext, "Sorry, did not get any data!");
                 }
+            } else {
+                ToastUtil.show(mContext, "Sorry, cannot get any data!");
             }
+        } else {
+            ToastUtil.showerror(this.getApplicationContext(), errorCode);
         }
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
     }
 }

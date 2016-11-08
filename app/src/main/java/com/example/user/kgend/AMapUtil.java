@@ -3,6 +3,7 @@ package com.example.user.kgend;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.services.core.LatLonPoint;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,38 @@ public class AMapUtil {
     }
 
     public static String getFriendlyTime(int second) {
+        if (second > 3600) {
+            int hour = second / 3600;
+            int minute = (second % 3600) / 60;
+            return hour + "H" + minute + "M";
+        }
+        if (second > 60) {
+            int minute = second / 60;
+            return minute + "M";
+        }
         return second + "s";
+    }
+
+    public static String getFriendlyLength(int lenMeter) {
+        if (lenMeter > 10000) {
+            int dis = lenMeter / 1000;
+            return dis + "km";
+        }
+        if (lenMeter > 1000) {
+            float dis = (float) lenMeter / 1000;
+            DecimalFormat fnum = new DecimalFormat("##0.0");
+            String dstr = fnum.format(dis);
+            return dstr + "km";
+        }
+        if (lenMeter > 100) {
+            int dis = lenMeter / 50 * 50;
+            return dis + "m";
+        }
+
+        int dis = lenMeter / 10 * 10;
+        if (dis == 0) {
+            dis = 10;
+        }
+        return dis + "s";
     }
 }
