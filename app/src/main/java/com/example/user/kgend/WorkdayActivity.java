@@ -124,7 +124,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         mAMap.getUiSettings().setMyLocationButtonEnabled(true);
         mAMap.getUiSettings().setCompassEnabled(true);
         mAMap.getUiSettings().setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
-        mAMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+        mAMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         mAMap.setMyLocationEnabled(true);
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
         //LatLngBounds latLngBounds = new LatLngBounds();
