@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -25,6 +26,8 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.Polyline;
+import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DriveRouteResult;
@@ -36,19 +39,18 @@ import com.amap.api.services.route.WalkRouteResult;
 /**
  * Created by user on 2016/10/31.
  */
-public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener, RouteSearch.OnRouteSearchListener, AMap.OnMapClickListener {
+public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener {
     private AMap mAMap;
     private MapView mMapView;
-    private Context mContext;
-    private RouteSearch mRouteSearch;
-    private RideRouteResult mRideResult;
-    private RelativeLayout mBottomLayout;
-    private LatLonPoint mStartPoint = new LatLonPoint(31.131233,121.461006);
-    private LatLonPoint mEndPoint = new LatLonPoint(31.170121,121.401232);
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
-    private final int ROUTE_TYPE_RIDE = 4;
+    private PolylineOptions mPolyOption;
+    private PathRecord record;
+    private long mStartTime;
+    private long mEndTime;
+    private ToggleButton tbtn;
+    private DbAdapter mDbAdapter;
     private ProgressDialog progDialog = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,66 +60,20 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         init();
-        setFromtoMaker();
-        searchRouteResult(ROUTE_TYPE_RIDE, RouteSearch.RidingDefault);
+        initpolyline();
     }
 
-    private void searchRouteResult(int routeType, int mode) {
-        if (mStartPoint == null) {
-            ToastUtil.show(mContext, "Locating... please wait");
-            return;
-        }
-        if (mEndPoint == null) {
-            ToastUtil.show(mContext, "Did not choose a Ending yet");
-            return;
-        }
-        showProgressDialog();
-        final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(mStartPoint, mEndPoint);
-        if (routeType == ROUTE_TYPE_RIDE) {
-            RouteSearch.RideRouteQuery query = new RouteSearch.RideRouteQuery(fromAndTo, mode);
-            mRouteSearch.calculateRideRouteAsyn(query);
-        }
+    private void initpolyline() {
     }
 
-    private void showProgressDialog() {
-        if (progDialog == null) {
-            progDialog = new ProgressDialog(this);
-            progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progDialog.setIndeterminate(false);
-            progDialog.setMessage("searching...");
-            progDialog.setCancelable(true);
-            progDialog.show();
-        }
-    }
-
-    private void dismissProgressDialog() {
-        if (progDialog != null) {
-            progDialog.dismiss();
-        }
-    }
-
-    private void setFromtoMaker() {
-        mAMap.addMarker(new MarkerOptions().position(AMapUtil.convertToLatLng(mStartPoint))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-        mAMap.addMarker(new MarkerOptions().position(AMapUtil.convertToLatLng(mEndPoint))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-
-    }
 
     private void init() {
         if (mAMap == null) {
             mAMap = mMapView.getMap();
             setUpMap();
         }
-        registerListener();
-        mRouteSearch = new RouteSearch(this);
-        mRouteSearch.setRouteSearchListener(this);
-        mBottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
     }
 
-    private void registerListener() {
-        mAMap.setOnMapClickListener(WorkdayActivity.this);
-    }
 
     private void setUpMap() {
         mAMap.setLocationSource(this);
@@ -157,9 +113,9 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation.getErrorCode() == 0) {
             mListener.onLocationChanged(aMapLocation);
+            String Cityname = aMapLocation.getCity();
         } else {
             Log.e("ErrorCode", aMapLocation.getErrorCode() + aMapLocation.getErrorInfo());
-            String Cityname = aMapLocation.getCity();
         }
     }
 
@@ -184,62 +140,5 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
             mLocationClient.onDestroy();
         }
         mLocationClient = null;
-    }
-
-    @Override
-    public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onRideRouteSearched(RideRouteResult result, int errorCode) {
-        dismissProgressDialog();
-        mAMap.clear();
-        if (errorCode == 1000) {
-            if (result != null && result.getPaths() != null) {
-                if (result.getPaths().size() > 0) {
-                    mRideResult = result;
-                    final RidePath ridePath = mRideResult.getPaths().get(0);
-                    RideRouteOverlay rideRouteOverlay = new RideRouteOverlay(this, mAMap, ridePath, mRideResult.getStartPos(), mRideResult.getTargetPos());
-                    rideRouteOverlay.removeFromMap();
-                    rideRouteOverlay.addToMap();
-                    rideRouteOverlay.zoomToSpan();
-                    mBottomLayout.setVisibility(View.VISIBLE);
-                    int dis = (int) ridePath.getDistance();
-                    int dur = (int) ridePath.getDuration();
-                    String des = AMapUtil.getFriendlyTime(dur) + "(" +AMapUtil.getFriendlyLength(dis) + ")";
-                    mBottomLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(mContext, RideDetailActivity.class);
-                            intent.putExtra("ride_path", ridePath);
-                            intent.putExtra("ride_result", mRideResult);
-                            startActivity(intent);
-                        }
-                    });
-                } else if (result == null && result.getPaths() == null) {
-                    ToastUtil.show(mContext, "Sorry, did not get any data!");
-                }
-            } else {
-                ToastUtil.show(mContext, "Sorry, cannot get any data!");
-            }
-        } else {
-            ToastUtil.showerror(this.getApplicationContext(), errorCode);
-        }
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
     }
 }
