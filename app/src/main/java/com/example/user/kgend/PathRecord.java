@@ -20,4 +20,7 @@ public class PathRecord {
     public void setPathline(List<AMapLocation> pathline) {
         this.mPathlinePoints = pathline;
     }
+
+    public void setStartpoint(AMapLocation startpoint) {
+    }
 }

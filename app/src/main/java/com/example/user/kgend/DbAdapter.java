@@ -108,6 +108,7 @@ public class DbAdapter {
             record.setId(allRecordCursor.getString(allRecordCursor.getColumnIndex(DbAdapter.KEY_LINE)));
             String lines = allRecordCursor.getString(allRecordCursor.getColumnIndex(KEY_LINE));
             record.setPathline(Util.parselocations(lines));
+            record.setStartpoint(Util.parselocation(allRecordCursor.getString(allRecordCursor.getColumnIndex(DbAdapter.KEY_START))));
         }
         return allRecord;
     }
