@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.ashokvarma.bottomnavigation.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +106,8 @@ public class DbAdapter {
             record.setId(allRecordCursor.getString(allRecordCursor.getColumnIndex(DbAdapter.KEY_DURATION)));
             record.setId(allRecordCursor.getString(allRecordCursor.getColumnIndex(DbAdapter.KEY_DATE)));
             record.setId(allRecordCursor.getString(allRecordCursor.getColumnIndex(DbAdapter.KEY_LINE)));
+            String lines = allRecordCursor.getString(allRecordCursor.getColumnIndex(KEY_LINE));
+            record.setPathline(Util.parselocations(lines));
         }
         return allRecord;
     }
