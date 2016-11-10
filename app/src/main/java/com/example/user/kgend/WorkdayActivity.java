@@ -1,9 +1,12 @@
 package com.example.user.kgend;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
@@ -35,6 +39,16 @@ import com.amap.api.services.route.RidePath;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import static com.amap.api.col.q.a.l;
 
 /**
  * Created by user on 2016/10/31.
@@ -52,6 +66,8 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private ToggleButton tbtn;
     private DbAdapter mDbAdapter;
     private ProgressDialog progDialog = null;
+    private GoogleApiClient mClient;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +88,95 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
             mAMap = mMapView.getMap();
             setUpMap();
         }
+        tbtn = (ToggleButton) findViewById(R.id.locationbtn);
+        tbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tbtn.isChecked()) {
+                    Log.i("标志:", "isChecked");
+                    mAMap.clear(true);
+                    if (record != null) {
+                        record = null;
+                    }
+                    record = new PathRecord();
+                    mStartTime = System.currentTimeMillis();
+                    record.setDate(getFmDate(mStartTime));
+                } else {
+                    mEndTime = System.currentTimeMillis();
+                    saveRecord(record.getPathline(), record.getDate());
+                }
+            }
+        });
+    }
+
+    protected void saveRecord(List<AMapLocation> list, String time) {
+        if (list != null && list.size() > 0) {
+            mDbAdapter = new DbAdapter(this);
+            mDbAdapter.open();
+            String duration = getDuration();
+            float distance = getDistance(list);
+            String average = getAverage(distance);
+            String pathlineString = getPathlineString(list);
+        }
+    }
+
+    private String getPathlineString(List<AMapLocation> list) {
+        if (list == null || list.size() == 0) {
+            return " ";
+        }
+        StringBuffer pathline = new StringBuffer();
+        for (int i = 0; i < list.size() - 1; i++) {
+            AMapLocation location = list.get(i);
+            String locString = amapLocationToString(location);
+            pathline.append(locString).append(";");
+        }
+        String pathLineString = pathline.toString();
+        pathLineString = pathLineString.substring(0, pathLineString.length() - 1);
+        return pathLineString;
+    }
+
+    private String amapLocationToString(AMapLocation location) {
+        StringBuffer locString = new StringBuffer();
+        locString.append(location.getLatitude()).append(",");
+        locString.append(location.getLongitude()).append(",");
+        locString.append(location.getTime()).append(",");
+        locString.append(location.getProvider()).append(",");
+        locString.append(location.getSpeed()).append(",");
+        locString.append(location.getBearing());
+        return locString.toString();
+    }
+
+    private String getAverage(float distance) {
+        return String.valueOf(distance / (float)(mEndTime - mStartTime));
+    }
+
+    private float getDistance(List<AMapLocation> list) {
+        float distance = 0;
+        if (distance == 0 || list.size() == 0) {
+            return distance;
+        }
+        for (int i = 0; i < list.size() - 1; i++) {
+            AMapLocation firstpoint = list.get(i);
+            AMapLocation secondpint = list.get(i+1);
+            LatLng firstlatLng = new LatLng(firstpoint.getLatitude(), firstpoint.getLongitude());
+            LatLng secondlatLng = new LatLng(secondpint.getLatitude(), secondpint.getLongitude());
+            double betweenDis = AMapUtils.calculateLineDistance(firstlatLng, secondlatLng);
+            distance = (float) (distance + betweenDis);
+        }
+        return distance;
+    }
+
+    private String getDuration() {
+        return String.valueOf((mEndTime - mStartTime) / 1000f);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private String getFmDate(long time) {
+        SimpleDateFormat formater = new SimpleDateFormat(
+                "yyyy-MM-dd  HH:mm:ss ");
+        Date curDate = new Date(time);
+        String date = formater.format(curDate);
+        return date;
     }
 
 
@@ -140,5 +245,16 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
             mLocationClient.onDestroy();
         }
         mLocationClient = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mClient.disconnect();
     }
 }
