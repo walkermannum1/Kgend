@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static android.graphics.Color.GREEN;
 import static com.amap.api.col.q.a.l;
 
 /**
@@ -59,7 +61,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
-    private PolylineOptions mPolyOption;
+    private PolylineOptions mPolyOptions;
     private PathRecord record;
     private long mStartTime;
     private long mEndTime;
@@ -80,6 +82,9 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     }
 
     private void initpolyline() {
+        mPolyOptions = new PolylineOptions();
+        mPolyOptions.width(8f);
+        mPolyOptions.color(Color.GREEN);
     }
 
 
@@ -117,6 +122,14 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
             float distance = getDistance(list);
             String average = getAverage(distance);
             String pathlineString = getPathlineString(list);
+            AMapLocation firstLocation = list.get(0);
+            AMapLocation lastLocation = list.get(list.size() - 1);
+            String startpoint = amapLocationToString(firstLocation);
+            String endpoint = amapLocationToString(lastLocation);
+            mDbAdapter.createRecord(String.valueOf(distance), duration, average, pathlineString, startpoint, endpoint, time);
+            mDbAdapter.close();
+        } else {
+            Toast.makeText(WorkdayActivity.this, "Did not get any record!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -193,6 +206,12 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         mMapView.onPause();
@@ -218,10 +237,29 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation.getErrorCode() == 0) {
             mListener.onLocationChanged(aMapLocation);
+            LatLng mylocation = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
+            mAMap.moveCamera(CameraUpdateFactory.changeLatLng(mylocation));
             String Cityname = aMapLocation.getCity();
+            if (tbtn.isChecked()) {
+                record.addPoint(aMapLocation);
+                mPolyOptions.add(mylocation);
+                redrawlines();
+            }
         } else {
             Log.e("ErrorCode", aMapLocation.getErrorCode() + aMapLocation.getErrorInfo());
         }
+    }
+
+    private void redrawlines() {
+        if (mPolyOptions.getPoints().size() > 0) {
+            mAMap.clear(true);
+            mAMap.addPolyline(mPolyOptions);
+        }
+    }
+
+    public void Record(View v) {
+        Intent intent = new Intent(WorkdayActivity.this, RecordActivity.class);
+        startActivity(intent);
     }
 
     @Override
