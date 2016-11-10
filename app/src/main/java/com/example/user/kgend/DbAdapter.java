@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.ashokvarma.bottomnavigation.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.R.attr.name;
@@ -109,7 +110,10 @@ public class DbAdapter {
             String lines = allRecordCursor.getString(allRecordCursor.getColumnIndex(KEY_LINE));
             record.setPathline(Util.parselocations(lines));
             record.setStartpoint(Util.parselocation(allRecordCursor.getString(allRecordCursor.getColumnIndex(DbAdapter.KEY_START))));
+            record.setEndpoint(Util.parselocation(allRecordCursor.getString(allRecordCursor.getColumnIndex(DbAdapter.KEY_END))));
+            allRecord.add(record);
         }
+        Collections.reverse(allRecord);
         return allRecord;
     }
 
