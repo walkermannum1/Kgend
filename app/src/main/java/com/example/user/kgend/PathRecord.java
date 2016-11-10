@@ -100,7 +100,8 @@ public class PathRecord {
     public String toString() {
         StringBuilder record = new StringBuilder();
         record.append("记录大小：" + getPathline().size() + ", " );
-        record.append("距离：" + getDistance() + ", ");
+        record.append("距离：" + getDistance() + "m, ");
+        record.append("时间：" + getDuration() + "s.");
         return record.toString();
     }
 }
