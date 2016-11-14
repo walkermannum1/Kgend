@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:weightSum="1">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        app:srcCompat="@android:drawable/ic_menu_mapmode"
+        android:id="@+id/Record_title"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/total_distance"
+            android:layout_width="184dp"
+            android:layout_height="30dp"
+            android:id="@+id/textView"
+            android:layout_weight="0.05"
+            android:textSize="20sp"
+            android:textAlignment="textEnd"/>
+
+        <TextView
+            android:text="TextVi"
+            android:id="@+id/textView2"
+            android:layout_width="184dp"
+            android:layout_weight="0.04"
+            android:layout_height="30dp"/>
+    </LinearLayout>
 
 </LinearLayout>
