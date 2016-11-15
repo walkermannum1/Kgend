@@ -3,12 +3,15 @@ package com.example.user.kgend;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 
 /**
  * Created by user on 2016/11/11.
  */
-public class RecordAdapter implements ExpandableListAdapter {
+
+public class RecordAdapter extends BaseExpandableListAdapter {
+
     @Override
     public void registerDataSetObserver(DataSetObserver dataSetObserver) {
 
