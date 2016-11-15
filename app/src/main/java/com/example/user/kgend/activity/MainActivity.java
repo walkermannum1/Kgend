@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(RideFragment.newInstance());
         fragments.add(ActivityFragment.newInstance());
-        fragments.add(ActivityFragment.MineFragment.newInstance());
+        fragments.add(MineFragment.newInstance());
         fragments.add(SafeFragment.newInstance());
         return fragments;
     }
