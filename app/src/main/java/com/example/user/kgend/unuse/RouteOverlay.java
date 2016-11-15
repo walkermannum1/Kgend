@@ -1,4 +1,4 @@
-package com.example.user.kgend;
+package com.example.user.kgend.unuse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,6 +13,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.example.user.kgend.R;
 
 import java.util.ArrayList;
 import java.util.List;

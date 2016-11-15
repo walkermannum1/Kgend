@@ -1,4 +1,4 @@
-package com.example.user.kgend;
+package com.example.user.kgend.activity;
 
 import android.app.Activity;
 
