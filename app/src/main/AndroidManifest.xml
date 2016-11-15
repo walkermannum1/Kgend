@@ -16,17 +16,17 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="com.amap.api.v2.apikey"
                    android:value="9a6a63d15c3727a2bb4486cd3e951da7" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".WorkdayActivity"
+        <activity android:name=".activity.WorkdayActivity"
                   android:label="Workday">
         </activity>
-        <activity android:name=".PlaydayActivity"
+        <activity android:name=".activity.PlaydayActivity"
                   android:label="Playday">
         </activity>
         <service android:name="com.amap.api.location.APSService" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for

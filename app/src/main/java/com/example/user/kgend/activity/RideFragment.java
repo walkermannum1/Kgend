@@ -1,4 +1,4 @@
-package com.example.user.kgend;
+package com.example.user.kgend.activity;
 
 
 import android.content.Intent;
@@ -17,6 +17,8 @@ import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.example.user.kgend.R;
+import com.example.user.kgend.unuse.ToastUtil;
 
 import java.util.List;
 

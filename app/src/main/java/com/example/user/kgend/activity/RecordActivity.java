@@ -1,10 +1,14 @@
-package com.example.user.kgend;
+package com.example.user.kgend.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.example.user.kgend.DbAdapter;
+import com.example.user.kgend.PathRecord;
+import com.example.user.kgend.RecordAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.user.kgend;
+package com.example.user.kgend.activity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +10,7 @@ import android.view.Window;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.example.user.kgend.R;
 
 import java.util.ArrayList;
 
