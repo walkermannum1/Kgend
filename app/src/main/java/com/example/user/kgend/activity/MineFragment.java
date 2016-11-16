@@ -10,6 +10,7 @@ import android.widget.ExpandableListView;
 
 import com.example.user.kgend.PathRecord;
 import com.example.user.kgend.R;
+import com.example.user.kgend.adapter.RecordAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MineFragment extends Fragment {
         Group = new ArrayList<String>();
         Group.add("");
         mExpandableListView = (ExpandableListView)view.findViewById(R.id.all_list);
-        PathRecord.RecordAdapter adapter = new PathRecord.RecordAdapter();
+        RecordAdapter adapter = new RecordAdapter();
         mExpandableListView.setAdapter(adapter);
         return view;
     }

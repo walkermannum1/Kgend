@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.example.user.kgend.adapter.DbAdapter;
 import com.example.user.kgend.PathRecord;
+import com.example.user.kgend.adapter.RecordAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by user on 2016/11/10.
  */
 public class RecordActivity extends Activity implements AdapterView.OnItemClickListener {
-    private PathRecord.RecordAdapter mRecordAdapter;
+    private RecordAdapter mRecordAdapter;
     private ListView mAllRecordListView;
     private DbAdapter mDbAdapter;
     private List<PathRecord> mAllRecord = new ArrayList<PathRecord>();

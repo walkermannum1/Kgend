@@ -1,14 +1,27 @@
 package com.example.user.kgend.adapter;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+
+import com.example.user.kgend.PathRecord;
+
+import java.util.List;
 
 /**
  * Created by user on 2016/11/16.
  */
 
 public class RecordAdapter extends BaseExpandableListAdapter {
+
+    private Context mContext;
+    private List<PathRecord> mRecordList;
+
+    public RecordAdapter(Context context, List<PathRecord> list) {
+        this.mContext = context;
+        this.mRecordList = list;
+    }
 
     @Override
     public int getGroupCount() {
