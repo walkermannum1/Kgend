@@ -1,4 +1,4 @@
-package com.example.user.kgend;
+package com.example.user.kgend.adapter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,14 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ashokvarma.bottomnavigation.utils.Utils;
+import com.example.user.kgend.PathRecord;
+import com.example.user.kgend.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static android.R.attr.name;
-import static android.R.attr.version;
 
 /**
  * Created by user on 2016/11/9.

@@ -1,4 +1,4 @@
-package com.example.user.kgend;
+package com.example.user.kgend.util;
 
 import com.amap.api.location.AMapLocation;
 

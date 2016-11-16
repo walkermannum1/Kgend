@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.example.user.kgend.PathRecord;
 import com.example.user.kgend.R;
-import com.example.user.kgend.RecordAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class MineFragment extends Fragment {
         Group = new ArrayList<String>();
         Group.add("");
         mExpandableListView = (ExpandableListView)view.findViewById(R.id.all_list);
-        RecordAdapter adapter = new RecordAdapter();
+        PathRecord.RecordAdapter adapter = new PathRecord.RecordAdapter();
         mExpandableListView.setAdapter(adapter);
         return view;
     }

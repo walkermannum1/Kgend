@@ -1,26 +1,14 @@
-package com.example.user.kgend;
+package com.example.user.kgend.adapter;
 
-import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListAdapter;
 
 /**
- * Created by user on 2016/11/11.
+ * Created by user on 2016/11/16.
  */
 
 public class RecordAdapter extends BaseExpandableListAdapter {
-
-    @Override
-    public void registerDataSetObserver(DataSetObserver dataSetObserver) {
-
-    }
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-
-    }
 
     @Override
     public int getGroupCount() {
@@ -70,35 +58,5 @@ public class RecordAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return false;
-    }
-
-    @Override
-    public boolean areAllItemsEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public void onGroupExpanded(int i) {
-
-    }
-
-    @Override
-    public void onGroupCollapsed(int i) {
-
-    }
-
-    @Override
-    public long getCombinedChildId(long l, long l1) {
-        return 0;
-    }
-
-    @Override
-    public long getCombinedGroupId(long l) {
-        return 0;
     }
 }

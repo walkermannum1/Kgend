@@ -25,7 +25,7 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
-import com.example.user.kgend.DbAdapter;
+import com.example.user.kgend.adapter.DbAdapter;
 import com.example.user.kgend.PathRecord;
 import com.example.user.kgend.R;
 import com.google.android.gms.common.api.GoogleApiClient;
