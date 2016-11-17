@@ -10,8 +10,10 @@ import android.widget.ExpandableListView;
 
 import com.example.user.kgend.PathRecord;
 import com.example.user.kgend.R;
+import com.example.user.kgend.adapter.DbAdapter;
 import com.example.user.kgend.adapter.RecordAdapter;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +23,10 @@ import java.util.List;
 
 public class MineFragment extends Fragment {
     private static MineFragment fragment = null;
+    private RecordAdapter mAdapter;
+    private DbAdapter mDbhelper;
+    private List<PathRecord> child = new ArrayList<PathRecord>();
     private ExpandableListView mExpandableListView;
-    private List<String> Group;
-    private List<List<String>> Child;
 
     public static Fragment newInstance() {
         if (fragment == null) {
@@ -39,12 +42,16 @@ public class MineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mine_record, container, false);
-        Group = new ArrayList<String>();
-        Group.add("");
         mExpandableListView = (ExpandableListView)view.findViewById(R.id.all_list);
-        RecordAdapter adapter = new RecordAdapter();
-        mExpandableListView.setAdapter(adapter);
+        mDbhelper = new DbAdapter(getActivity());
+        mDbhelper.open();
+        searchAllRecordfromDB();
+        mAdapter = new RecordAdapter(getActivity(), child);
+        mExpandableListView.setAdapter(mAdapter);
         return view;
+    }
+
+    private void searchAllRecordfromDB() {
     }
 }
 
