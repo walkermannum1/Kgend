@@ -1,11 +1,13 @@
 package com.example.user.kgend.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import com.example.user.kgend.PathRecord;
@@ -21,12 +23,13 @@ import java.util.List;
  * Created by user on 2016/11/15.
  */
 
-public class MineFragment extends Fragment {
+public class MineFragment extends Fragment implements AdapterView.OnItemClickListener{
     private static MineFragment fragment = null;
     private RecordAdapter mAdapter;
     private DbAdapter mDbhelper;
     private List<PathRecord> child = new ArrayList<PathRecord>();
     private ExpandableListView mExpandableListView;
+    public static final String RECORD_ID = "record_id";
 
     public static Fragment newInstance() {
         if (fragment == null) {
@@ -52,6 +55,15 @@ public class MineFragment extends Fragment {
     }
 
     private void searchAllRecordfromDB() {
+        child = mDbhelper.queryRecordAll();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        PathRecord recordItem = (PathRecord) parent.getAdapter().getItem(position);
+        Intent intent = new Intent(getActivity(), ShowRecord.class);
+        intent.putExtra(RECORD_ID, recordItem.getId());
+        startActivity(intent);
     }
 }
 
