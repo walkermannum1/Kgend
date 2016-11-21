@@ -19,6 +19,16 @@ public class PathRecord {
     private String mDistance;
     private String mDuration;
     private String mDate;
+
+    public String getMonth() {
+        return mMonth;
+    }
+
+    public void setMonth(String month) {
+        mMonth = month;
+    }
+
+    private String mMonth;
     private String mAveragespeed;
     private int mId = 0;
 

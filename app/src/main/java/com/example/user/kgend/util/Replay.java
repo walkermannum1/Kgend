@@ -34,7 +34,15 @@ public class Replay implements Runnable{
     }
     @Override
     public void run() {
-
+        if (mTraceList != null) {
+            for (int i = 0; i < mTraceList.size(); i++) {
+                if (mStop){
+                    break;
+                }
+                LatLng latLng = mTraceList.get(i);
+                Message message = mHandler.obtainMessage();
+            }
+        }
     }
 
     static class TraceRePlayHandler extends Handler {
@@ -49,9 +57,28 @@ public class Replay implements Runnable{
         public void handleMessage(Message message) {
             super.handleMessage(message);
             Replay play = mReplay.get();
+            switch (message.what) {
+                case TRACE_MOVE:
+                    LatLng latLng = (LatLng) message.obj;
+                    if (play.mUpdateListener != null) {
+                        play.mUpdateListener.onTraceUpdating(latLng);
+                    }
+                    break;
+                case TRACE_FINISH:
+                    if (play.mUpdateListener != null) {
+                        play.mUpdateListener.onTraceUpdateFinish();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
-    private class TraceRePlayListener {
+    private interface TraceRePlayListener {
+
+        public void onTraceUpdating(LatLng latLng);
+
+        public void onTraceUpdateFinish();
     }
 }
