@@ -41,6 +41,19 @@ public class Replay implements Runnable{
                 }
                 LatLng latLng = mTraceList.get(i);
                 Message message = mHandler.obtainMessage();
+                message.what = TRACE_MOVE;
+                message.obj = latLng;
+                mHandler.sendMessage(message);
+                try {
+                    Thread.sleep(mIntervalMillisecond);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!mStop) {
+                Message finishMessage = mHandler.obtainMessage();
+                finishMessage.what = TRACE_FINISH;
+                mHandler.sendMessage(finishMessage);
             }
         }
     }
