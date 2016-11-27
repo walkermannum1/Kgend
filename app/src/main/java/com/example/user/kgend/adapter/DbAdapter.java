@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.user.kgend.PathRecord;
+import com.example.user.kgend.data.PathRecord;
 import com.example.user.kgend.util.Util;
 
 import java.util.ArrayList;

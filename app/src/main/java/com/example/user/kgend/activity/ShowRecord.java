@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Polyline;
 import com.amap.api.trace.TraceListener;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public class ShowRecord extends Activity implements AMap.OnMapLoadedListener, Tr
 
     private MapView mMapView;
     private AMap aMap;
+    private Polyline mOriginPolyline, mProcedPolyline;
+    private int mRecordItemId;
+    private List<LatLng> mOriginLatLng;
+    private List<LatLng> mProcedLatLng;
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {

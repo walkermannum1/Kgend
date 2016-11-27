@@ -10,12 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
-import com.example.user.kgend.PathRecord;
+import com.example.user.kgend.data.PathRecord;
 import com.example.user.kgend.R;
 import com.example.user.kgend.adapter.DbAdapter;
 import com.example.user.kgend.adapter.RecordAdapter;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 

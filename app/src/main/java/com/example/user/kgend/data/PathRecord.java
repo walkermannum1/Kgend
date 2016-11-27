@@ -1,4 +1,4 @@
-package com.example.user.kgend;
+package com.example.user.kgend.data;
 
 import android.view.View;
 import android.view.ViewGroup;

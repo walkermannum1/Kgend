@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.user.kgend.adapter.DbAdapter;
-import com.example.user.kgend.PathRecord;
+import com.example.user.kgend.data.PathRecord;
 import com.example.user.kgend.adapter.RecordAdapter;
 
 import java.util.ArrayList;

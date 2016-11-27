@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
-import com.example.user.kgend.PathRecord;
+import com.example.user.kgend.data.PathRecord;
 
 import java.util.List;
 
