@@ -19,6 +19,7 @@ public class PathRecord {
     private String mDistance;
     private String mDuration;
     private String mDate;
+    private String month;
 
     public String getMonth() {
         return mMonth;
@@ -114,7 +115,7 @@ public class PathRecord {
     public String toString() {
         StringBuilder record = new StringBuilder();
         record.append("记录大小：" + getPathline().size() + ", " );
-        record.append("距离：" + getDistance() + "m, ");
+        record.append("距离：" + getDistance() + "公里, ");
         record.append("时间：" + getDuration() + "s.");
         return record.toString();
     }
