@@ -49,8 +49,6 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private long mEndTime;
     private ToggleButton tbtn;
     private DbAdapter mDbAdapter;
-    private ProgressDialog progDialog = null;
-    private GoogleApiClient mClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -275,6 +273,5 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     @Override
     public void onStop() {
         super.onStop();
-        mClient.disconnect();
     }
 }
