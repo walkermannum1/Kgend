@@ -265,7 +265,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         mLocationClient = null;
     }
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
     }
@@ -273,5 +273,5 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     @Override
     public void onStop() {
         super.onStop();
-    }
+    }*/
 }

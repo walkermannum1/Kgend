@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.services.weather.LocalDayWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherForecast;
@@ -18,7 +19,6 @@ import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
 import com.example.user.kgend.R;
-import com.example.user.kgend.unuse.ToastUtil;
 
 import java.util.List;
 
@@ -116,10 +116,10 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
                 wind.setText(weatherlive.getWindDirection()+"风     "+weatherlive.getWindPower()+"级");
                 humidity.setText("湿度         "+weatherlive.getHumidity()+"%");
             }else {
-                ToastUtil.show(getActivity(), R.string.no_result);
+                Toast.makeText(getActivity().getApplicationContext(), "android地图生命周期管理", Toast.LENGTH_SHORT).show();
             }
         }else {
-            ToastUtil.showerror(getActivity(), rCode);
+            Toast.makeText(getActivity().getApplication(), rCode, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -134,10 +134,10 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
                 fillforecast();
 
             }else {
-                ToastUtil.show(getActivity(), R.string.no_result);
+                Toast.makeText(getActivity().getApplicationContext(), R.string.no_result, Toast.LENGTH_SHORT).show();
             }
         }else {
-            ToastUtil.showerror(getActivity(), rCode);
+            Toast.makeText(getActivity().getApplicationContext(), rCode, Toast.LENGTH_SHORT).show();
         }
     }
 
