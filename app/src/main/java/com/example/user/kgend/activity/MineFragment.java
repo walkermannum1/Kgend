@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.example.user.kgend.data.PathRecord;
 import com.example.user.kgend.R;
@@ -25,8 +26,9 @@ import java.util.List;
 public class MineFragment extends Fragment implements AdapterView.OnItemClickListener{
     private static MineFragment fragment = null;
     private RecordAdapter mAdapter;
+    private ListView mAllRecordListView;
     private DbAdapter mDbhelper;
-    private List<PathRecord> child = new ArrayList<PathRecord>();
+    private List<PathRecord> mAllRecord = new ArrayList<PathRecord>();
     private ExpandableListView mExpandableListView;
     public static final String RECORD_ID = "record_id";
 
@@ -44,17 +46,18 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mine_record, container, false);
-        mExpandableListView = (ExpandableListView)view.findViewById(R.id.all_list);
+        mAllRecordListView = (ListView)view.findViewById(R.id.all_list);
         mDbhelper = new DbAdapter(getActivity());
         mDbhelper.open();
         searchAllRecordfromDB();
-        mAdapter = new RecordAdapter(getActivity(), child);
-        mExpandableListView.setAdapter(mAdapter);
+        mAdapter = new RecordAdapter(getActivity(), mAllRecord);
+        mAllRecordListView.setAdapter(mAdapter);
+        mAllRecordListView.setOnClickListener((View.OnClickListener) this);
         return view;
     }
 
     private void searchAllRecordfromDB() {
-        child = mDbhelper.queryRecordAll();
+        mAllRecord = mDbhelper.queryRecordAll();
     }
 
     @Override
