@@ -2,7 +2,6 @@ package com.example.user.kgend.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.graphics.Color;
@@ -28,7 +27,6 @@ import com.amap.api.maps.model.PolylineOptions;
 import com.example.user.kgend.adapter.DbAdapter;
 import com.example.user.kgend.data.PathRecord;
 import com.example.user.kgend.R;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -3,6 +3,7 @@ package com.example.user.kgend.adapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -66,7 +67,7 @@ public class DbAdapter {
         dbHelper = new DatabaseHelper(mContext);
     }
 
-    public DbAdapter open() throws SQLiteException {
+    public DbAdapter open() throws SQLException {
         db = dbHelper.getWritableDatabase();
         return this;
     }

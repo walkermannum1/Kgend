@@ -63,9 +63,10 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         PathRecord recordItem = (PathRecord) parent.getAdapter().getItem(position);
-        Intent intent = new Intent(getActivity(), ShowRecord.class);
+        Intent intent = new Intent(getActivity().getApplicationContext(), ShowRecord.class);
         intent.putExtra(RECORD_ID, recordItem.getId());
         startActivity(intent);
+        getActivity().finish();
     }
 }
 
