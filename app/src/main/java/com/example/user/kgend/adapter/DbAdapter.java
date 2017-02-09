@@ -95,7 +95,7 @@ public class DbAdapter {
         args.put("startpoint", startpoint);
         args.put("endpoint", endpoint);
         args.put("date", date);
-        return db.insert(RECORD_CREATE, null, args);
+        return db.insert(RECORD_TABLE, null, args);
     }
 
     public List<PathRecord> queryRecordAll() {
