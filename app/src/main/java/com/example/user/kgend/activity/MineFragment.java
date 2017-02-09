@@ -52,7 +52,7 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
         searchAllRecordfromDB();
         mAdapter = new RecordAdapter(getActivity(), mAllRecord);
         mAllRecordListView.setAdapter(mAdapter);
-        mAllRecordListView.setOnClickListener((View.OnClickListener) this);
+        mAllRecordListView.setOnItemClickListener(this);
         return view;
     }
 

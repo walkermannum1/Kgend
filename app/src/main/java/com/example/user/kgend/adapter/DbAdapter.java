@@ -27,20 +27,21 @@ public class DbAdapter {
     public static final String KEY_START = "startpoint";
     public static final String KEY_END = "endpoint";
     public static final String KEY_DATE = "date";
-    private final static String DATABASE_PATH = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "Record";
+    private final static String DATABASE_PATH = android.os.Environment
+            .getExternalStorageDirectory().getAbsolutePath() + "/Record";
     static final String DATABASE_NAME = DATABASE_PATH + "/" + "record.db";
     private static final int DATABASE_VERSION = 1;
     private static final String RECORD_TABLE = "record";
     private static final String RECORD_CREATE = "create table if not exists record("
             + KEY_ROWID
-            + "integer primary key autoincrement, "
+            + " integer primary key autoincrement,"
             + "startpoint STRING, "
             + "endpoint STRING, "
             + "line STRING, "
             + "distance STRING, "
             + "duration STRING, "
             + "averagespeed STRING, "
-            + "date STRING, " + ");";
+            + "date STRING" + ");";
 
     public static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -84,7 +85,8 @@ public class DbAdapter {
         return db.delete(RECORD_TABLE, "id =" + rowId, null) > 0;
     }
 
-    public long createRecord(String distance, String duration, String averagespeed, String line, String startpoint, String endpoint, String date) {
+    public long createRecord(String distance, String duration, String averagespeed,
+                             String line, String startpoint, String endpoint, String date) {
         ContentValues args = new ContentValues();
         args.put("distance", distance);
         args.put("duration", duration);
