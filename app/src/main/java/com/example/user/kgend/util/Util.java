@@ -50,11 +50,11 @@ public class Util {
         String[] loc = latLonString.split(",");
         AMapLocation location = null;
         if (loc.length == 6) {
-            location = new AMapLocation(loc[2]);
-            location.setProvider(loc[2]);
+            location = new AMapLocation(loc[3]);
+            location.setProvider(loc[3]);
             location.setLatitude(Double.parseDouble(loc[0]));
             location.setLongitude(Double.parseDouble(loc[1]));
-            location.setTime(Long.parseLong(loc[3]));
+            location.setTime(Long.parseLong(loc[2]));
             location.setSpeed(Float.parseFloat(loc[4]));
             location.setBearing(Float.parseFloat(loc[5]));
         } else if (loc.length == 2) {
